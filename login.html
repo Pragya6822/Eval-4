@@ -124,36 +124,44 @@ button:hover {
 
 <script>
     document.getElementById("loginform").addEventListener("submit", login);
+    //after  login success redirect user to index.html page 
+    // and save user information in local storage
+    // Also, check if entered password matches the saved password
+    // If not, show an error message and stop the login process
+    // If both checks pass, redirect user to index.html page
 
     function login(event) {
         event.preventDefault();
+        const username = document.getElementById("username").value;
         const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
+        const password = document.getElementById("password").value; 
         const API_KEY = "AIzaSyDK-1ny4EDZCxiniKJUVwYDI6rB6VEmsrQ";
 
         // Check if entered email matches the saved signup email
         const signupEmail = localStorage.getItem("signupEmail");
-        if (email !== signupEmail) {
-            alert("Email does not match the registered email.");
+        if (email!= signupEmail) {
+            document.getElementById("message").innerText = "Email does not match the registered email.";
             return;
-        }
-
+        }   
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password, returnSecureToken: true })
         };
-
         fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`, requestOptions)
-            .then((resp) => resp.json())
-            .then((res) => {
-                if (res.error) {
-                    document.getElementById("message").innerText = "Wrong User credentials";
-                } else {
-                    // Redirect to the product page on successful login
-                    window.location.href = "product.html";
-                }
-            })
-            .catch((err) => console.error("Error:", err));
+        .then((resp) => resp.json())
+        .then((res) => {
+            if (res.error) {
+                document.getElementById("message").innerText = "Wrong User credentials";
+            } else {
+                // Redirect to the product page on successful login
+                window.location.href = "index.html";
+            }
+        })
+        .catch((err) => console.error("Error:", err));
+
     }
+
+
+
 </script>
